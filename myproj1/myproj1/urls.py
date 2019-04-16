@@ -30,5 +30,8 @@ urlpatterns = [
     path('getapp/', views.mainFunc),     # 바로 views에 있는 함수 불러옴
     path('getapp/callget', CallView.as_view()),
     path('getapp/', include('getapp.urls')),
+
+    # sessionapp 접속 경로
+    path('sessionapp/', include('sessionapp.urls')),
 ]
 
