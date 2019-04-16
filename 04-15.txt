@@ -78,7 +78,7 @@ myapp -> urls.py
     - 데이터 전송 시 노출되지 않음
     - 데이터 변경이나 등록 요청시
 
-**** get 방식 실습 순서: getapp ****
+**** call/get 방식 실습 순서: getapp ****
 - (base) C:\njikim\Django\myproj1>python manage.py startapp getapp
 - myproj1 -> settings.py INSTALLED_APPS에 getapp 추가
 
@@ -124,3 +124,39 @@ myapp -> urls.py
     from getapp import views
 
     path('insert', views.insertFunc) 
+    
+getapp -> templates -> insert.html
+- note: post 방식은 반드시 form으로 묶어서        
+    <form action="insert" method="post">
+
+- settings.py에서 MIDDLEWARE의  #'django.middleware.csrf.CsrfViewMiddleware', 주석처리
+
+- getapp -> views.py
+# get 방식일 떼 insert.html, post 방식일 때 list.html, 
+def insertFunc(request):
+    if request.method == 'GET':
+        print('get 요청 처리')
+        return render (request, "insert.html")
+    else:
+        return render(request, "list.html")
+
+* list.html: post 요청 처리 페이지 *
+- getapp -> templates -> list.html 생성
+
+
+- getapp -> views.py
+def insertFunc(request):
+    if request.method == 'GET':
+        print('get 요청 처리')
+        return render (request, "insert.html")
+    else:
+        name = request.POST.get("name")
+        return render(request, "list.html", {"name": name})
+
+- getapp -> templates -> list.html
+결과: {{name}} 추가
+
+
+**** session 처리 ****
+
+

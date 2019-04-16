@@ -9,4 +9,10 @@ class CallView(TemplateView):
     template_name = "callget.html" # template_name는 장고 default 변수
 
 def insertFunc(request):
-    return render(request, "insert.html")
+    #print('요청 방식:' + request.method)
+    if request.method == 'GET':
+        print('get 요청 처리')
+        return render (request, "insert.html")
+    else:
+        name = request.POST.get("name")
+        return render(request, "list.html", {"name": name})
