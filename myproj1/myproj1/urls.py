@@ -33,5 +33,8 @@ urlpatterns = [
 
     # sessionapp 접속 경로
     path('sessionapp/', include('sessionapp.urls')),
+
+    # dbapp 접속경로
+    path('dbapp/', include('dbapp.urls')),
 ]
 

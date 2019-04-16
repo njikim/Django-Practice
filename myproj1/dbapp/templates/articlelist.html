@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <!--http://127.0.0.1:8000/dbapp/show-->
+<body>
+    {% extends 'layout.html' %}
+    {% block content %}
+
+    {% if articles.count > 0 %}
+        {% for i in articles %}
+            <b>{{i.code}}</b> {{i.name}} {{i.price}} {{i.pub_date}} <br>
+        {% endfor %}
+    {% else %}
+        <p>자료가 없네요</p>
+    {% endif %}
+
+    {% endblock %}
+</body>
+</html>
