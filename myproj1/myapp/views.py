@@ -15,4 +15,4 @@ def hello_template(request):
     return render(request, 'hello.html', {'name':name})
 
 def hello_images(request):
-    return render(request, 'my.html')
+    return render(request, 'image.html')

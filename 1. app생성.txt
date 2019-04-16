@@ -57,7 +57,7 @@ myapp -> static 폴더 생성
     images -> 이미지 추가
 
 myapp -> templates
-    my.html 작성
+    image.html 작성
 
 myapp -> views.py
     def hello_images

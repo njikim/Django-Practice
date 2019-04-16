@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Title</title>
-</head>
 <body>
-    <h1>Bookmarks List({{urlCount}})</h1>
+    <h1>Bookmark List({{urlCount}})</h1>
     <ul>
         {% for row in urlList %}
-        <li><a href="">{{row.title}}</a></li>
+        <li><a href="{{row.url}}">{{row.title}}</a></li>
         {% endfor %}
     </ul>
 </body>

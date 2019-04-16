@@ -13,62 +13,69 @@
     - 데이터 변경이나 등록 요청시
 
 **** call/get 방식 실습 순서: getapp ****
-- (base) C:\njikim\Django\myproj1>python manage.py startapp getapp
-- myproj1 -> settings.py INSTALLED_APPS에 getapp 추가
+## 앱 생성 및 메인 화면 url 정리
+1. app 생성
+(base) C:\njikim\Django\myproj1>python manage.py startapp getapp
+myproj1 -> settings.py INSTALLED_APPS에 getapp 추가
 
-- getapp -> templates 생성
+2. getapp -> views.py
+    def mainFunc(request):
+        return render(request, 'index.html')
 
-- myproj1 -> urls.py
-    path('getapp/')
+3. getapp -> templates 생성 -> index.html 작성
+# 데이터전송 
+<h1> GET/POST 연습 </h1> <br>
+<a href="callget?name=eunjikim&age=20"> callget 파일 호출 </a> <br>
 
-- getapp -> views.py
-    mainFunc()
-
-- getapp -> templates -> index.html 작성
-    데이터 전송 by href="callget?name=eunjikim&age=20" & using form tag
-
-- myproj1 -> urls.py
+4. myproj1 -> urls.py
     from getapp import views
-    path('getapp/', views.mainFunc)     # 메인 url에서 바로 처리    
+    path('getapp/', views.mainFunc),     # 메인 url에서 바로 views에 있는 함수 불러와서 처리    
 
 # note: 
-- 그전에는 include로 접속 경로를 지정. 지금은 views에 있는 함수 바로 불러옴
+- 그전에는 include로 접속 경로를 toss. But, 지금은 views에 있는 함수 바로 불러옴
 - 메인에서 views로 직접 처리하는 건 하나만 할 수 있음
 - http://127.0.0.1:8000/getapp/ 이런식으로 직접 url을 쳐서 요청하는 방식이 바로 get 방식
 - http://127.0.0.1:8000/getapp?age=30    # get 방식으로 데이터도 같이 전송하는 예시
 
-* callget.html: getapp에서 href 클릭 했을 때 이동할 html *
-- getapp -> views.py
+## callget.html: getapp에서 href 클릭 했을 때 이동할 html 
+5. getapp -> views.py
     from django.views.generic.base import TemplateView
-    class callView(TemplateView)
+    class CallView(TemplateView):   #django의 내장 클래스를 상속 받음
+        template_name = "callget.html" # template_name는 장고 default 변수
 
- - myproj1 -> urls.py
+6. myproj1 -> urls.py
     from getapp.views import CallView
     path('getapp/callget/', CallView.as_view())
 
-* insert.html: callget.html에서 href 클릭 했을 때 이동할 html *
-- myproj1 -> urls.py
-    path('getapp/', include('getapp.urls'))
+## insert.html: callget.html에서 href 클릭 했을 때 이동할 html 
+7. myproj1 -> urls.py
+    path('getapp/', include('getapp.urls')),
     
-- getapp -> views.py    
-    def insertFunc()
+8. getapp -> views.py    
+    def insertFunc(request):
+        print('요청 방식:' + request.method)
 
-- getapp -> urls.py 생성
+9. getapp -> urls.py 생성
     from django.urls import path
     from getapp import views
 
-    path('insert', views.insertFunc) 
+    path('insert', views.insertFunc), 
 
 ############################# 04-16-tuesday #############################
 
-getapp -> templates -> insert.html
+10. getapp -> templates -> insert.html
 - note: post 방식은 반드시 form으로 묶어서        
+    <h1> get 요청처리 page </h1> <br>
     <form action="insert" method="post">
+        이름: <input type="text" name="name">
+        <input type="submit" value="확인">
+    </form>    
 
-- settings.py에서 MIDDLEWARE의  #'django.middleware.csrf.CsrfViewMiddleware', 주석처리
+11. csrf
+settings.py에서 MIDDLEWARE의  #'django.middleware.csrf.CsrfViewMiddleware', 주석처리
 
-- getapp -> views.py
-# get 방식일 떼 insert.html, post 방식일 때 list.html, 
+12. getapp -> views.py
+# get 방식일 때 insert.html 호출, post 방식일 때 list.html 호출 
 def insertFunc(request):
     if request.method == 'GET':
         print('get 요청 처리')
@@ -76,11 +83,9 @@ def insertFunc(request):
     else:
         return render(request, "list.html")
 
-* list.html: post 요청 처리 페이지 *
-- getapp -> templates -> list.html 생성
-
-
-- getapp -> views.py
+## list.html: post 요청 처리 페이지 
+13. getapp -> views.py
+# list.html 호출 시 name 변수도 같이 넘겨주기 
 def insertFunc(request):
     if request.method == 'GET':
         print('get 요청 처리')
@@ -89,7 +94,8 @@ def insertFunc(request):
         name = request.POST.get("name")
         return render(request, "list.html", {"name": name})
 
-- getapp -> templates -> list.html
-결과: {{name}} 추가
+14. getapp -> templates -> list.html 작성
+<h1> post 요청 처리 page </h1> <br>
+    결과: {{name}}
 
 
