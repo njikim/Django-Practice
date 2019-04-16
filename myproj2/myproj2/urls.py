@@ -21,7 +21,7 @@ from bookmarkapp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.mainFunc),
+    path('', views.home),
 ]
 
 if settings.DEBUG:
