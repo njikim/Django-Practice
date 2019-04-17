@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'bookmarkapp',
     'memoapp',
+    'surveyapp',
 ]
 
 MIDDLEWARE = [

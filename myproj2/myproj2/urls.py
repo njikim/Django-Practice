@@ -28,6 +28,9 @@ urlpatterns = [
     
     #memoapp 경로설정
     path('memolist/', include('memoapp.urls')),
+
+    #surveyapp 경로설정
+    path('survey/', include('surveyapp.urls')),
 ]
 
 if settings.DEBUG:

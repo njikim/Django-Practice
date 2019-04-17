@@ -1,0 +1,105 @@
+0. surveyapp 생성
+
+1. surveyapp -> models.py
+    class Survey(models.Model):
+        survey_idx = models.AutoField(primary_key=True)
+        question = models.TextField(null=False)
+        ans1 = models.TextField(null=False)
+        ans2 = models.TextField(null=False)
+        ans3 = models.TextField(null=False)
+        ans4 = models.TextField(null=False)
+        status = models.CharField(max_length=1, default='y')    # y: 진행중 n:종료
+
+    class Answer(models.Model):
+        answer_idx = models.AutoField(primary_key=True)
+        survey_idx = models.IntegerField()                      # survey_idx: foreign key 역할
+        num =models.IntegerField()
+
+2. migration
+C:\njikim\Django\myproj2>python manage.py makemigrations
+C:\njikim\Django\myproj2>python manage.py migrate
+
+3. surveyapp -> admin.py
+    from surveyapp.models import Survey, Answer
+
+    class SurveyAdmin(admin.ModelAdmin):
+        list_display = ("question","ans1", "ans2", "ans3", "ans4", "status")
+
+    admin.site.register(Survey, SurveyAdmin)
+    admin.site.register(Answer)
+
+4. surveyapp -> templates -> survey_home.html
+    <h2> 온라인 설문조사 </h2>
+    <form>
+        <input type="radio" name="num" value="1"><br>
+        <input type="radio" name="num" value="2"><br>
+        <input type="radio" name="num" value="3"><br>
+        <input type="radio" name="num" value="4"><br>
+        <input type="submit" value="투표"><br>
+        <input type="button" value="결과 확인"><br>
+    </form>
+
+5. bookmarkapp -> templates -> home.html
+    <h1> 온라인 설문 조사 </h1>
+    <a href="survey">바로가기</a>
+
+## 바로가기 클릭 시, 메인화면 설정 (http://127.0.0.1:8000/survey/)
+6.  - myproj2 -> urls.py
+        path('survey/', include('surveyapp.urls')),
+
+    - surveyapp -> urls.py
+        from django.urls import path
+        from surveyapp import views
+
+        urlpatterns = [
+            path('', views.home),
+        ]
+
+    - surveyapp -> views.py
+        def home(request):
+            return render(request, 'survey_home.html')
+
+7. surveyapp -> views.py
+from surveyapp.models import Survey, Answer
+
+def home(request):
+    dto = Survey.objects.filter(status='y').order_by('-survey_idx')[0]
+    return render(request, 'survey_home.html', {"dto":dto})
+
+8. surveyapp -> templates -> survey_home.html
+    <form action="save_survey" method="POST">
+        <b> {{dto.question}} </b><br><br>
+        <input type="radio" name="num" value="1"> {{dto.ans1}} <br>
+        <input type="radio" name="num" value="2"> {{dto.ans2}} <br>
+        <input type="radio" name="num" value="3"> {{dto.ans3}} <br>
+        <input type="radio" name="num" value="4"> {{dto.ans4}} <br>
+        <input type="submit" value="투표">
+        <input type="button" value="결과 확인">
+    </form>
+
+9. surveyapp -> urls.py
+    path('save_survey', views.save_survey),
+
+10. surveyapp -> views.py
+# post 방식이니까 csrf_exempt import 해주기
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def save_survey(request):
+    return render(request, 'success.html')
+
+## save 기능: !!!!!!!!!input type="hidden" 중요
+11. surveyapp -> templates -> survey_home.html
+    <!-- 폼태그 안에 추가-->
+    <input type="hidden" name="idx" value="{{dto,survey_idx}}">
+
+12. surveyapp -> views.py
+@csrf_exempt
+def save_survey(request):
+    idx = request.POST["idx"]
+    num = request.POST["num"]
+    Answer(survey_idx=idx, num=num).save()
+    return render(request, 'success.html')
+
+
+
