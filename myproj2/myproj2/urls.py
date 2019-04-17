@@ -21,8 +21,13 @@ from bookmarkapp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    
+    # bookmarkapp 경로설정
     path('', views.home),
     path('detail', views.detail),
+    
+    #memoapp 경로설정
+    path('memolist/', include('memoapp.urls')),
 ]
 
 if settings.DEBUG:

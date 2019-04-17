@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h2> 한줄 메모장 </h2>
+    {{memoCount}} 개의 메모가 있습니다. <br>
+    <form action="memoinsert" method="POST">
+        이름: <input type="text" name="writer"/>
+        메모: <input type="text" name="memo" />
+        <input type="submit" value="OK">
+    </form>
+    <hr>
+    <table border="1">
+        <tr>
+            <th>number</th><th>name</th><th>memo</th><th>date</th>
+            {% for row in memoList %}
+            <tr>
+                <td>{{row.idx}}</td>
+                <!-- 테이블에서 이름을 클릭했을 때 detail.html이 보여지게 -->
+                <td><a href="memodetail?idx={{row.idx}}">{{row.writer}}</a></td>
+                <td>{{row.memo}}</td>
+                <td>{{row.post_date}}</td>
+            </tr>
+            {% endfor %}
+        </tr>
+    </table>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
