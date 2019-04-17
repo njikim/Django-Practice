@@ -4,8 +4,11 @@
     <h1>Bookmark List({{urlCount}})</h1>
     <ul>
         {% for row in urlList %}
-        <li><a href="{{row.url}}">{{row.title}}</a></li>
+   <!-- <li><a href="detail?url={{row.url}}&title={{row.title}}">{{row.title}}</a></li> -->
+        <li><a href="detail?url={{row.url}}&title={{row.title}}">{{row.title}}</a></li>
         {% endfor %}
     </ul>
+    <h1> 한줄 메모 앱 </h1>
+    <a href ="" 바로가기></a>
 </body>
 </html>
