@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html>
 <body>
+{% load bootstrap3 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block bootstrap3_content %}
     <h1>Bookmark List({{urlCount}})</h1>
     <ul>
         {% for row in urlList %}
@@ -12,5 +17,6 @@
     <a href ="memolist"> 바로가기 </a>
     <h1> 온라인 설문 조사 </h1>
     <a href="survey">바로가기</a>
+    {% endblock %}
 </body>
 </html>

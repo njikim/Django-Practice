@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'bookmarkapp',
     'memoapp',
     'surveyapp',
+    'bootstrap3',
 ]
 
 MIDDLEWARE = [

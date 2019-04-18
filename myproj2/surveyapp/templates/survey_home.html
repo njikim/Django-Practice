@@ -1,16 +1,28 @@
 <!DOCTYPE html>
 <html>
+<head>
+{% load bootstrap3 %}
+
+{% bootstrap_css %}    
+<script>
+    function fnShowResult(){
+        location.href = "show_result?survey_idx={{dto.survey_idx}}"
+    }
+</script>
+</head>
 <body>
-    <h2> 온라인 설문조사 </h2>
+{% block bootstrap3_content %}
+    <h2> 온라인 설문조사 </h2> 
     <form action="save_survey" method="POST">
-        <input type="hidden" name="idx" value="{{dto,survey_idx}}">
+        <input type="hidden" name="idx" value="{{dto.survey_idx}}">
         <b> {{dto.question}} </b> <br><br>
         <input type="radio" name="num" value="1"> {{dto.ans1}} <br>
         <input type="radio" name="num" value="2"> {{dto.ans2}} <br>
         <input type="radio" name="num" value="3"> {{dto.ans3}} <br>
         <input type="radio" name="num" value="4"> {{dto.ans4}} <br>
         <input type="submit" value="투표">
-        <input type="button" value="결과 확인">
+        <input type="button" value="결과 확인" onclick="fnShowResult()">
     </form>
+{% endblock %}
 </body>
 </html>

@@ -13,7 +13,7 @@
     - 데이터 변경이나 등록 요청시
 
 **** call/get 방식 실습 순서: getapp ****
-## 앱 생성 및 메인 화면 url 정리
+## 앱 생성 및 메인 화면 url 지정
 1. app 생성
 (base) C:\njikim\Django\myproj1>python manage.py startapp getapp
 myproj1 -> settings.py INSTALLED_APPS에 getapp 추가

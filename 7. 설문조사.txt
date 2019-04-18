@@ -28,6 +28,9 @@ C:\njikim\Django\myproj2>python manage.py migrate
     admin.site.register(Survey, SurveyAdmin)
     admin.site.register(Answer)
 
+4. admin 사이트에 들어가서 Survey 문항 작성하기
+
+
 4. surveyapp -> templates -> survey_home.html
     <h2> 온라인 설문조사 </h2>
     <form>
@@ -91,7 +94,8 @@ def save_survey(request):
 ## save 기능: !!!!!!!!!input type="hidden" 중요
 11. surveyapp -> templates -> survey_home.html
     <!-- 폼태그 안에 추가-->
-    <input type="hidden" name="idx" value="{{dto,survey_idx}}">
+    <form action="save_survey" method="POST">
+        <input type="hidden" name="idx" value="{{dto.survey_idx}}">
 
 12. surveyapp -> views.py
 @csrf_exempt
@@ -101,5 +105,42 @@ def save_survey(request):
     Answer(survey_idx=idx, num=num).save()
     return render(request, 'success.html')
 
+13. surveyapp -> templates -> survey_home.html
+<input type="button" value="결과 확인" onclick="fnShowResult()">
 
+<script>
+    function fnShowResult(){
+        location.href = "show_result?survey_idx={{dto.survey_idx}}"
+    }
+</script>
 
+15. surveyapp -> templates -> result.html
+    <h2> 설문조사 결과 </h2>
+    <table border="1">
+        <tr>
+            <th>문항</th><th>응답수</th><th>응답비율</th>
+        </tr>
+    </table>
+
+16. surveyapp -> urls.py
+    path('show_result', views.show_result),
+
+17. surveyapp -> views.py
+    def show_result(request):
+        idx = request.GET["survey_idx"]
+        print(idx)
+        Survey.objects.GET(survey_idx=idx)
+        answer = [ans.ans1, ans.ans2, ans.ans3, ans.ans4]
+        print(answer)
+        surveyList = Survey.objects.raw("""
+            select survey_idx, num, count(num) sum_num,
+            round((select count(*) from surveyapp_answer 
+            where survey_idx=a.survey_idx and num=a.num) * 100.0 /
+            (select count(*) from surveyapp_answer where survey_idx=a.survey_idx), 1) rate
+            from surveyapp_answer a
+            where survey_idx = %s
+                group by survey_idx, num order by num
+            """, idx)
+        surveyList = zip(surveyList, answer)
+        print("surveyList: ", surveyList)
+        return render(request, 'result.html')
