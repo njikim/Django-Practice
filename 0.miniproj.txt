@@ -1,0 +1,79 @@
+0. miniproj 생성 & loginapp 생성 + setting에 추가 & migration
+1. loginapp -> templates
+    login.html
+    main.html
+    shop.html
+    error.html 생성
+
+2. miniproj -> urls.py
+    path('', include('loginapp.urls')),
+
+3. loginapp -> urls.py
+    from django.urls import path
+    from loginapp import views
+
+    urlpatterns = [
+        path('', views.login),
+    ]
+
+4. loginapp -> views.py
+    def login(request):
+        return render(request, 'login.html')
+
+5. login.html
+    <h2> 로그인 페이지 </h2>
+    <form action="main" method="POST">
+        ID: <input type="text" name="id" /> 
+        PW: <input type="text" name="pw" /> <br> <br>
+        <input type="submit" value="로그인" />
+        <input type="reset" value="취소" />
+    </form>
+
+6. loginapp -> urls.py
+    path('main', views.main),
+
+7. loginapp -> views.py
+    from django.views.decorators.csrf import csrf_exempt
+    from django.http.response import HttpResponseRedirect
+
+    @csrf_exempt
+    def main(request):
+        if "id" in request.POST:
+            user_id = request.POST["id"]
+            user_pw = request.POST["pw"]
+            request.session["sess_id"] = user_id
+            print(user_id, user_pw)
+            print('hi1')
+            return HttpResponseRedirect("call_main") 
+        else:
+            print('else and go to error.html')
+            return render(request, 'error.html')
+
+8. loginapp -> urls.py
+    path('call_main', views.call_main),
+
+9. loginapp -> views.py
+    @csrf_exempt
+    def call_main(request):
+        if "sess_id" in request.session:
+            id = request.session["sess_id"]
+            return render(request, 'main.html', {"id": id})
+
+10. main.html
+    <h2> Welcome! {{id}} 님 안녕하세요 </h2>
+    <button type="button"><a href="shop" >쇼핑몰 바로가기 </a></button> <br><br> <!-- http://127.0.0.1:8000/shop -->
+    <button type="button"><a href="/"> 로그아웃 </a></button> <!-- http://127.0.0.1:8000/ -->
+
+11. shop.html
+    <h2> 즐거운 쇼핑! </h2>
+    <button type="button"><a href="main" > 메인으로 </a></button>
+
+12. loginapp -> urls.py
+    path('shop', views.shop),
+
+13. loginapp -> views.py
+    def shop(request):
+        return render(request, 'shop.html')
+
+
+
