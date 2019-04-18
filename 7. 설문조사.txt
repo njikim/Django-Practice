@@ -105,6 +105,7 @@ def save_survey(request):
     Answer(survey_idx=idx, num=num).save()
     return render(request, 'success.html')
 
+*****************04-18-목****************************
 13. surveyapp -> templates -> survey_home.html
 <input type="button" value="결과 확인" onclick="fnShowResult()">
 
@@ -127,20 +128,19 @@ def save_survey(request):
 
 17. surveyapp -> views.py
     def show_result(request):
-        idx = request.GET["survey_idx"]
-        print(idx)
-        Survey.objects.GET(survey_idx=idx)
-        answer = [ans.ans1, ans.ans2, ans.ans3, ans.ans4]
-        print(answer)
-        surveyList = Survey.objects.raw("""
+    idx = request.GET["survey_idx"]
+    ans = Survey.objects.get(survey_idx = idx)
+    answer = [ans.ans1, ans.ans2, ans.ans3, ans.ans4]
+    surveyList = Survey.objects.raw('''
             select survey_idx, num, count(num) sum_num,
-            round((select count(*) from surveyapp_answer 
-            where survey_idx=a.survey_idx and num=a.num) * 100.0 /
-            (select count(*) from surveyapp_answer where survey_idx=a.survey_idx), 1) rate
-            from surveyapp_answer a
-            where survey_idx = %s
+                round((select count(*) from surveyapp_answer
+                where survey_idx=a.survey_idx and num=a.num) * 100.0 /
+                (select count(*) from surveyapp_answer where survey_idx=a.survey_idx), 1) rate
+                from surveyapp_answer a
+                where survey_idx = %s
                 group by survey_idx, num order by num
-            """, idx)
-        surveyList = zip(surveyList, answer)
-        print("surveyList: ", surveyList)
-        return render(request, 'result.html')
+    ''', idx)
+    surveyList = zip(surveyList, answer)
+    #print("surveyList : ", surveyList)
+    count = Answer.objects.all().count()
+    return render(request, 'result.html', {"surveyList":surveyList, "count":count})  

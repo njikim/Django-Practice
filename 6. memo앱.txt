@@ -1,5 +1,5 @@
 ****** CRUD 기능의 메모앱 ******
-
+***********04-18-수요일**********
 0. 앱 생성 (memoapp)
     (base) C:\njikim\Django\myproj2>python manage.py startapp memoapp
     settings.py에 memoapp 추가
