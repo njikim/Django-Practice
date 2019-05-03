@@ -53,7 +53,7 @@
 
 class ArticleAdmin(admin.ModelAdmin):
     list_display = ('id', 'code', 'name', 'price', 'pub_date')
-
+                
 admin.site.register(Article, ArticleAdmin)
 
 10. dbapp -> views.py

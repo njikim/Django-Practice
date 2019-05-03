@@ -6,7 +6,7 @@
 
 1. bookmarkapp -> templates -> home.html
     <h1> 한줄 메모 앱 </h1>
-    <a href ="memolist" 바로가기></a>
+    <a href ="memolist"> 바로가기 </a>
 
 2. memoapp -> templates -> list.html
     <h2> 한줄 메모장 </h2>
