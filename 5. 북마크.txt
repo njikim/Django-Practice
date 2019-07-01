@@ -1,0 +1,110 @@
+****** 북마크 앱 ******
+
+0. 프로젝트 & 앱 생성 (myproj2 & bookmarkapp)
+    (base) C:\njikim\Django>django-admin startproject myproj2
+    (base) C:\njikim\Django\myproj2>python manage.py migrate
+    (base) C:\njikim\Django\myproj2>python manage.py startapp bookmarkapp
+    settings.py에 bookmarkapp 추가
+
+1. bookmarkapp -> models.py
+    from django.db import models
+
+    class Bookmark(models.Model):
+        title = models.CharField(max_length=100, blank=True)
+        url = models.URLField("url", unique=True)
+
+        def __str__(self):
+            return self.title
+
+2. migration & superuser
+    (base) C:\njikim\Django\myproj2>python manage.py makemigrations
+    (base) C:\njikim\Django\myproj2>python manage.py migrate
+
+    (base) C:\njikim\Django\myproj2>python manage.py createsuperuser
+
+3. bookmarkapp -> admin.py
+    from django.contrib import admin
+    from bookmarkapp.models import Bookmark
+
+    admin.site.register(Bookmark)
+
+4. bookmarkapp -> templates -> home.html
+    <h1>Bookmark List! {{urlCount}}개</h1>
+    <ul>
+        {% for row in urlList %}
+        <li><a href="{{row.url}}">{{row.title}}</a></li>
+        {% endfor %}
+    </ul>
+
+5. myproj2 -> url.py
+    from bookmarkapp import views
+    path('', views.home),
+
+6. bookmarkapp -> views.py
+    def home(request):
+        urlCount = Bookmark.objects.all().count()
+        urlList = Bookmark.objects.order_by("title")
+        return render(request, 'home.html', {"urlCount": urlCount, 'urlList':urlList})
+
+7. bookmarkapp -> templates -> detail.html
+    <h2> {{dto.title}} 상세 페이지 </h2>
+    <li> URL: <a href ="{{dto.url}}">{{dto.url}}</a> </li>
+
+8. bookmarkapp -> views.py
+    def detail(request):
+        return render(request, 'detail.html')
+
+9. myproj2 -> urls.py
+    path('detail', views.detail),
+
+10. bookmarkapp -> views.py
+    def detail(request):
+        addr = request.GET["url"]
+        return render(request, 'detail.html', {"addr":addr})
+
+11. bookmarkapp -> templates -> detail.html
+    <h2> 상세 페이지 </h2>
+    <li> URL: {{addr}} </li>
+
+12. bookmarkapp -> templates -> home.html
+    <ul>
+        {% for row in urlList %}
+        <li><a href="detail?url={{row.url}}&title={{row.title}}">{{row.title}}</a></li>
+        {% endfor %}
+    </ul>
+
+13. bookmarkapp -> views.py
+def detail(request):
+    addr = request.GET["url"]
+
+    # select * from bookmark_bookmark where url=http://www.google.com
+    dto = Bookmark.objects.get(url=addr)            # 넘겨줄 데이터가 많은 경우 이런식으로!!!!!!!!!!
+    print(dto.title , ',' , dto.url)
+    return render(request, 'detail.html', {"dto": dto})
+
+14. bookmarkapp -> templates -> detail.html
+    <h2> {{dto.title}} 상세 페이지 </h2>
+    <li> URL: <a href ="{{dto.url}}">{{dto.url}}</a> </li>
+
+
+
+
+
+
+
+
+**********
+pip install django-debug-toolbar
+INSTALLED_APPS      'debug_toolbar',
+MIDDLEWARE      'debug_toolbar.middleware.DebugToolbarMiddleware',
+INTERNAL_IPS = ['127.0.0.1']
+
+urls.py
+from django.conf import settings
+from django.conf.urls import url, include
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += [
+        url(r'^__debug__/', include(debug_toolbar.urls))
+    ] 

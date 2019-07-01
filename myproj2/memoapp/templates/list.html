@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html>
 <body>
+{% load bootstrap3 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block bootstrap3_content %}
     <h2> 한줄 메모장 </h2>
     {{memoCount}} 개의 메모가 있습니다. <br>
     <form action="memoinsert" method="POST">
@@ -23,6 +28,7 @@
             {% endfor %}
         </tr>
     </table>
+{% endblock %}
 </body>
 </html>
 

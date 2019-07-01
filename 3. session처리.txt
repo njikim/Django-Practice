@@ -1,4 +1,5 @@
 **** session 처리 실습 예제: sessionapp ****
+
 1. sessionapp 생성, settings.py에 추가
 
 2. sessionapp -> views.py
@@ -34,14 +35,15 @@
         <a href="">Mac os</a><br>
         <a href="">Linux</a><br>
     </body>
+
 8. sessionapp -> templates -> main.html
-    <a href="setOS">
+    <a href="setOS">운영체제 고르기</a>
 
 9. sessionapp -> urls.py    
     path("setOS", views.setOS),
 
 10. sessionapp -> templates -> showOS.html
-    <h2> 결과보기 (5초 후에 새로고침하면 os 선택 해제 됨) </h2>
+    <h2> 결과보기 (3초 후에 새로고침하면 OS 선택 해제 됨) </h2>
 
 11. sessionapp -> templates -> setOS.html
     <a href="showOS">Window</a><br>

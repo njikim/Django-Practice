@@ -13,10 +13,12 @@
     - 데이터 변경이나 등록 요청시
 
 **** call/get 방식 실습 순서: getapp ****
+
 ## 앱 생성 및 메인 화면 url 지정
 1. app 생성
 (base) C:\njikim\Django\myproj1>python manage.py startapp getapp
-myproj1 -> settings.py INSTALLED_APPS에 getapp 추가
+myproj1 -> settings.py 
+    INSTALLED_APPS에 getapp 추가
 
 2. getapp -> views.py
     def mainFunc(request):
@@ -32,7 +34,7 @@ myproj1 -> settings.py INSTALLED_APPS에 getapp 추가
     path('getapp/', views.mainFunc),     # 메인 url에서 바로 views에 있는 함수 불러와서 처리    
 
 # note: 
-- 그전에는 include로 접속 경로를 toss. But, 지금은 views에 있는 함수 바로 불러옴
+- 그전에는 include로 접속 경로를 toss. But, 지금은 메인 url에서 views에 있는 함수 바로 불러옴
 - 메인에서 views로 직접 처리하는 건 하나만 할 수 있음
 - http://127.0.0.1:8000/getapp/ 이런식으로 직접 url을 쳐서 요청하는 방식이 바로 get 방식
 - http://127.0.0.1:8000/getapp?age=30    # get 방식으로 데이터도 같이 전송하는 예시
@@ -41,7 +43,11 @@ myproj1 -> settings.py INSTALLED_APPS에 getapp 추가
 5. getapp -> views.py
     from django.views.generic.base import TemplateView
     class CallView(TemplateView):   #django의 내장 클래스를 상속 받음
-        template_name = "callget.html" # template_name는 장고 default 변수
+        template_name = "callget.html" # template_name: 장고 default 변수
+
+# note:
+- Class-based views: 메인 urls에서 Class멤버를 직접 호출
+- ClassName.as_views() 사용-> request-response 처리를 위한 메인 진입점 지정
 
 6. myproj1 -> urls.py
     from getapp.views import CallView
@@ -67,9 +73,9 @@ myproj1 -> settings.py INSTALLED_APPS에 getapp 추가
 - note: post 방식은 반드시 form으로 묶어서        
     <h1> get 요청처리 page </h1> <br>
     <form action="insert" method="post">
-        이름: <input type="text" name="name">
-        <input type="submit" value="확인">
-    </form>    
+        name: <input type="text" name="name">
+        <input type="submit" value="OK">
+    </form>       
 
 11. csrf
 settings.py에서 MIDDLEWARE의  #'django.middleware.csrf.CsrfViewMiddleware', 주석처리

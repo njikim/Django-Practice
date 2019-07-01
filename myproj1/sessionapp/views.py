@@ -17,6 +17,7 @@ def setOS(request): # favorite_os의 값 유무에 따라 return값을 다르게
 
 def showOS1(request):
     print('showOS1 함수 불러온 직후')
+    
 def showOS(request):    
     print('showOS 함수 불러온 직후')
     if "f_os" in request.session:

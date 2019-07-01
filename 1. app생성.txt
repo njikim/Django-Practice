@@ -21,15 +21,16 @@ myproj1 -> settings.py
 # 사용자가 접속 시 (요청 시) 함수 호출됨
 myproj1 -> myapp -> views.py
     from django.http.response import HttpResponse
-    def index()     
-
+    def index(request):     
+        return HttpResponse("인덱스 요청 처리. 여기는 메인 페이지")
+    
 3. 메인 urls.py 
 # 사용자가 '처음' 접속하면 views에서 index라는 함수가 실행 되게 경로를 설정
 myproj1 -> urls.py
     from django.urls.conf import include
     from myapp import views
     
-    path('myapp/', include('myapp.urls'))   # myapp.urls로 toss
+    path('myapp/', include('myapp.urls'))   # myapp.urls로 경로 toss
 
 4. myapp urls.py
 myapp -> urls.py 생성
@@ -46,7 +47,9 @@ myapp -> templates 폴더 생성 (장고 default명 임)
     hello.html 작성
 
 myapp -> views.py
-    def hello_template()
+    def hello_template(request):
+        name = '은지'
+        return render(request, 'hello.html', {'name':name})
 
 myapp -> urls.py
     path('hello_tem', views.hello_template)
@@ -60,7 +63,8 @@ myapp -> templates
     image.html 작성
 
 myapp -> views.py
-    def hello_images
-
+    def hello_images(request):
+        return render(request, 'image.html')
+        
 myapp -> urls.py
     path('img', views.hello_images)

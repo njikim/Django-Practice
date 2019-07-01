@@ -1,3 +1,5 @@
+****** 설문조사 앱 ******
+
 0. surveyapp 생성
 
 1. surveyapp -> models.py
@@ -63,11 +65,11 @@ C:\njikim\Django\myproj2>python manage.py migrate
             return render(request, 'survey_home.html')
 
 7. surveyapp -> views.py
-from surveyapp.models import Survey, Answer
+    from surveyapp.models import Survey, Answer
 
-def home(request):
-    dto = Survey.objects.filter(status='y').order_by('-survey_idx')[0]
-    return render(request, 'survey_home.html', {"dto":dto})
+    def home(request):
+        dto = Survey.objects.filter(status='y').order_by('-survey_idx')[0]
+        return render(request, 'survey_home.html', {"dto":dto})
 
 8. surveyapp -> templates -> survey_home.html
     <form action="save_survey" method="POST">
@@ -84,12 +86,12 @@ def home(request):
     path('save_survey', views.save_survey),
 
 10. surveyapp -> views.py
-# post 방식이니까 csrf_exempt import 해주기
-from django.views.decorators.csrf import csrf_exempt
+    # post 방식이니까 csrf_exempt import 해주기
+    from django.views.decorators.csrf import csrf_exempt
 
-@csrf_exempt
-def save_survey(request):
-    return render(request, 'success.html')
+    @csrf_exempt
+    def save_survey(request):
+        return render(request, 'success.html')
 
 ## save 기능: !!!!!!!!!input type="hidden" 중요
 11. surveyapp -> templates -> survey_home.html
@@ -98,22 +100,22 @@ def save_survey(request):
         <input type="hidden" name="idx" value="{{dto.survey_idx}}">
 
 12. surveyapp -> views.py
-@csrf_exempt
-def save_survey(request):
-    idx = request.POST["idx"]
-    num = request.POST["num"]
-    Answer(survey_idx=idx, num=num).save()
-    return render(request, 'success.html')
+    @csrf_exempt
+    def save_survey(request):
+        idx = request.POST["idx"]
+        num = request.POST["num"]
+        Answer(survey_idx=idx, num=num).save()
+        return render(request, 'success.html')
 
 *****************04-18-목****************************
 13. surveyapp -> templates -> survey_home.html
-<input type="button" value="결과 확인" onclick="fnShowResult()">
+    <input type="button" value="결과 확인" onclick="fnShowResult()">
 
-<script>
-    function fnShowResult(){
-        location.href = "show_result?survey_idx={{dto.survey_idx}}"
-    }
-</script>
+    <script>
+        function fnShowResult(){
+            location.href = "show_result?survey_idx={{dto.survey_idx}}"
+        }
+    </script>
 
 15. surveyapp -> templates -> result.html
     <h2> 설문조사 결과 </h2>

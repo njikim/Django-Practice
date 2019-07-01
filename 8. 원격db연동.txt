@@ -1,3 +1,5 @@
+****** 원격 DB 연동 ******
+
 0. myproj3 생성 &  myguest app & bootstrap3 추가 
 
 1. myproj3 -> settings.py
@@ -13,13 +15,13 @@
     }
 
 2. mysql 접속해서
-mysql> CREATE database mydb;
+    mysql> CREATE database mydb;
 
 3. myguest -> models.py
-class Guest(models.Model):
-    title = models.CharField(max_length=50)
-    content = models.TextField()
-    regdate = models.DateTimeField()
+    class Guest(models.Model):
+        title = models.CharField(max_length=50)
+        content = models.TextField()
+        regdate = models.DateTimeField()
 
 4. makemigrations & migrate & createsuperuser
 
@@ -52,58 +54,48 @@ class Guest(models.Model):
     admin.site.register(Guest, GuestAdmin)
 
 7. web에서 admin으로 접속 or mysql 접속해서 query문으로 data insert
-mysql> insert into myguest_guest(title, content, regdate) values ('test','first one', now());
+    mysql> insert into myguest_guest(title, content, regdate) values ('test','first one', now());
 
-8. http://127.0.0.1/ 에 main.html 보여주기    
-myguest -> templates -> main.html
-    {% load bootstrap3 %}
-    {% bootstrap_css %}
-    {% bootstrap_javascript %}
-    {% block bootstrap3_content %}
+## http://127.0.0.1/ 에 main.html 보여주기    
+8.  - myguest -> templates -> main.html
         <h2> 미니 방명록 보기 </h2>
-    {% endblock %}
 
-myproj3 -> urls.py
-    from myguest import views
-    path('', views.mainFunc),
+    - myproj3 -> urls.py
+        from myguest import views
+        path('', views.mainFunc),
 
-myguest -> views.py
-    def mainFunc(request):
-        return render(request, 'main.html')
+    - myguest -> views.py
+        def mainFunc(request):
+            return render(request, 'main.html')
 
-9. http://127.0.0.1:8000/guest 에 list.html 보여주기
-myguest -> templates -> list.html
-    {% load bootstrap3 %}
-    {% bootstrap_css %}
-    {% block bootstrap3_content %}
-    <h2>글 목록</h2>
-    <table border="1">
-        <tr>
-            <th>id</th><th>title</th><th>content</th><th>date</th>
-        </tr>
-        {% for g in gdatas %}
-        <tr>
-            <td>{{g.id}}</td><td>{{g.title}}</td><td>{{g.content}}</td><td>{{g.regdate}}</td>
-        </tr>
-        {% endfor %}
-    </table>
-    {% endblock %}
+## http://127.0.0.1:8000/guest 에 list.html 보여주기
+9.  - myguest -> templates -> list.html
+        <h2>글 목록</h2>
+        <table border="1">
+            <tr>
+                <th>id</th><th>title</th><th>content</th><th>date</th>
+            </tr>
+            {% for g in gdatas %}
+            <tr>
+                <td>{{g.id}}</td><td>{{g.title}}</td><td>{{g.content}}</td><td>{{g.regdate}}</td>
+            </tr>
+            {% endfor %}
+        </table>
 
-myproj3 -> urls.py
-    from django.conf.urls import url, include
-    path('guest/', include('myguest.urls')),
+    - myproj3 -> urls.py
+        from django.conf.urls import url, include
+        path('guest/', include('myguest.urls')),
 
-myguest -> urls.py
-    from myguest import views
-    path('', views.ListFunc),
+    - myguest -> urls.py
+        from myguest import views
+        path('', views.ListFunc),
 
+    - myguest -> views.py
+        from myguest.models import Guest
 
-myguest -> views.py
-    from myguest.models import Guest
-
-    def ListFunc(request):
-        gdata = Guest.objects.all()
-        return render(request, 'list.html', {'gdatas': gdata})
+        def ListFunc(request):
+            gdata = Guest.objects.all()
+            return render(request, 'list.html', {'gdatas': gdata})
 
 
 

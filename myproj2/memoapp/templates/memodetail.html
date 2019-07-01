@@ -9,6 +9,11 @@
     </script>
 </head>
 <body>
+{% load bootstrap3 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block bootstrap3_content %}
     <h2> 메모 편집 </h2>
     <form name="f1" method="POST">
         <!-- idx 값을 서버에 안보이게 전달할 때 -->
@@ -34,6 +39,7 @@
             </tr>
         </table>
     </form>
+{% endblock %}
 </body>
 
 </html>

@@ -1,7 +1,14 @@
 <!DOCTYPE html>
 <html>
 <body>
+{% load bootstrap3 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block bootstrap3_content %}
     <h2> {{dto.title}} 상세 페이지 </h2>
     <li> URL: <a href ="{{dto.url}}">{{dto.url}}</a> </li>
+{% endblock %}
+
 </body>
 </html>
